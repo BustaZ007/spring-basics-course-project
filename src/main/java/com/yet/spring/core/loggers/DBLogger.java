@@ -26,7 +26,6 @@ public class DBLogger extends AbstractLogger {
     }
 
     public void init() {
-        createDBSchema();
         createTableIfNotExists();
         updateEventAutoId();
     }
@@ -43,27 +42,9 @@ public class DBLogger extends AbstractLogger {
         System.out.println("All DB Event ids: " + allEventIds);
     }
 
-    private void createDBSchema() {
-        try {
-            jdbcTemplate.update("CREATE SCHEMA " + schema);
-        } catch (DataAccessException e) {
-            Throwable causeException = e.getCause();
-            if (causeException instanceof SQLException) {
-                SQLException sqlException = (SQLException) causeException;
-                if (sqlException.getSQLState().equals(SQL_ERROR_STATE_SCHEMA_EXISTS)) {
-                    System.out.println("Schema already exists");
-                } else {
-                    throw e;
-                }
-            } else {
-                throw e;
-            }
-        }
-    }
-
     private void createTableIfNotExists() {
         try {
-            jdbcTemplate.update("CREATE TABLE t_event (" + "id INT NOT NULL PRIMARY KEY," + "date TIMESTAMP,"
+            jdbcTemplate.update("CREATE TABLE IF NOT EXISTS t_event (" + "id INT NOT NULL PRIMARY KEY," + "date TIMESTAMP,"
                     + "msg VARCHAR(255)" + ")");
 
             System.out.println("Created table t_event");
