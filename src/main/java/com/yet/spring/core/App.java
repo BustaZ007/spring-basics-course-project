@@ -29,7 +29,7 @@ public class App {
         System.out.println(app.startupMessage);
         
         Client client = ctx.getBean(Client.class);
-        System.out.println("Client says: " + client.getGreeting());
+        System.out.println("Client says: " + client.getGreeting() + " I'm from " + client.getCity());
         
         app.logEvents(ctx);
         
@@ -48,6 +48,9 @@ public class App {
         
         event = ctx.getBean(Event.class);
         logEvent(EventType.ERROR, event, "Some event for 2");
+
+        event = ctx.getBean(Event.class);
+        logEvent(EventType.ALLERT, event, "My ALLERT type event msg");
         
         event = ctx.getBean(Event.class);
         logEvent(null, event, "Some event for 3");
